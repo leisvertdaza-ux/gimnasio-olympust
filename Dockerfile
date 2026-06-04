@@ -18,13 +18,13 @@ COPY . /var/www/html/
 # 5. Instalar dependencias con Composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# 6. CONFIGURACIÓN MÁGICA: Crear la base de datos SQLite vacía si no existe
+# 6. CREAR LA BASE DE DATOS FÍSICA SI NO EXISTE
 RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
 
 # 7. Apuntar Apache directamente a la carpeta 'public'
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# 8. Asignar los permisos correctos a Apache y a la base de datos
+# 8. Otorgar los permisos correctos a Apache y a la base de datos
 RUN chown -R www-data:www-data /var/www/html && chmod -R 775 /var/www/html/storage /var/www/html/database
 
 EXPOSE 80
