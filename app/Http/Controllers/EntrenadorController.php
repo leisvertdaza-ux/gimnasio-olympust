@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Entrenador;
+use Illuminate\Http\Request;
+
+class EntrenadorController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return Entrenador::all();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nombres' => 'required',
+            'especialidad' => 'required'
+        ]);
+
+        $entrenador = Entrenador::create([
+            'nombres' => $request->nombres,
+            'especialidad' => $request->especialidad
+        ]);
+
+        return response()->json($entrenador);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Entrenador $entrenador)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Entrenador $entrenador)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Entrenador $entrenador)
+    {
+        $entrenador->update([
+            'nombres' => $request->nombres,
+            'especialidad' => $request->especialidad
+        ]);
+
+        return response()->json($entrenador);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Entrenador $entrenador)
+    {
+        $entrenador->delete();
+
+        return response()->json([
+            'mensaje' => 'Entrenador eliminado'
+        ]);
+    }
+}
