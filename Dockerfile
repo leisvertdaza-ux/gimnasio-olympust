@@ -18,7 +18,7 @@ COPY . /var/www/html/
 # 5. Instalar dependencias con Composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# 6. CONFIGURACIÓN MÁGICA DE SQLITE: Crear base de datos vacía y darle permisos
+# 6. CONFIGURACIÓN DE SQLITE: Crear base de datos vacía y dar permisos
 RUN mkdir -p /var/www/html/database && \
     touch /var/www/html/database/database.sqlite && \
     chown -R www-data:www-data /var/www/html && \
