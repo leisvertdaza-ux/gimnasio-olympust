@@ -9,9 +9,9 @@ RUN a2enmod rewrite
 # Copiar todos tus archivos dentro del servidor
 COPY . /var/www/html/
 
-# MOVER EL ARCHIVO PRINCIPAL A LA RAÍZ:
-# Copiamos app.php desde la carpeta con tilde directamente a la raíz de Apache
-RUN cp /var/www/html/p*blico/app.php /var/www/html/index.php 2>/dev/null || cp /var/www/html/p*blico/app.php /var/www/html/app.php
+# BUSCAR Y MOVER EL ARCHIVO PRINCIPAL:
+# Este comando busca app.php de forma automática y lo copia como index.php en la raíz
+RUN find /var/www/html -name "app.php" -exec cp {} /var/www/html/index.php \;
 
 RUN chown -R www-data:www-data /var/www/html
 
