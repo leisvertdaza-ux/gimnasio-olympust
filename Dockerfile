@@ -1,19 +1,27 @@
 FROM php:8.2-apache
 
-# Instalar extensiones necesarias para Laravel (PDO, MySQL)
+# 1. Instalar dependencias del sistema y Composer (necesario para Laravel)
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# 2. Instalar extensiones de PHP indispensables
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Habilitar el módulo de reescritura de Apache para las rutas de Laravel
+# 3. Habilitar el módulo de reescritura de Apache
 RUN a2enmod rewrite
 
-# Copiar todos los archivos del proyecto a la raíz del servidor Apache
+# 4. Copiar todos los archivos del proyecto al servidor
 COPY . /var/www/html/
 
-# CONFIGURACIÓN CRUCIAL DE LARAVEL:
-# Apuntamos Apache directamente a la carpeta 'public' (estándar de Laravel)
+# 5. INSTALAR VENDOR: Ejecutar Composer para crear la carpeta que falta
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# 6. Apuntar Apache directamente a la carpeta 'public'
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Darle los permisos correctos a Apache sobre las carpetas de Laravel
+# 7. Asignar los permisos correctos a las carpetas de Laravel
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
